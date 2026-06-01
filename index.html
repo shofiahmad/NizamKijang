@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kijang Sejarah Kita</title>
+    <style>
+        /* --- RESET & BASIC SETUP --- */
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Georgia', serif; }
+        /* Body background: fallback color only. The hero (halaman pertama) will use the car image. */
+        body { 
+            background-color: #f4f0e6; 
+            color: #3b2f2f; 
+            line-height: 1.6; 
+        }
+        h1, h2, h3, h4 { font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; color: #4a3b32; }
+        p { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 6rem 2rem;
+            /* overlay gradient above the local car image present in the project folder */
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 100%), url('ZENIX KIRI.jpeg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            border-bottom: 8px solid rgba(0,0,0,0.25);
+            color: #ffffff;
+        }
+        .hero h1 { font-size: 3rem; margin-bottom: 1rem; color: #fff; text-shadow: 0 3px 10px rgba(0,0,0,0.6); }
+        .hero p { max-width: 600px; margin: 0 auto 2rem auto; font-size: 16px; color: #f3f3f3; text-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+        .btn-primary {
+            display: inline-block;
+            background-color: #8da374;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: sans-serif;
+            transition: background 0.3s;
+        }
+        .btn-primary:hover { background-color: #71835d; }
+
+        /* --- ARTIKEL SEJARAH --- */
+        .history-article {
+            /* background image for the sejarah artikel */
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.25) 100%), url('super beground.jpeg.jpeg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            padding: 3rem;
+            margin: 0 0 4rem 0; 
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid rgba(255,255,255,0.15);
+            color: #ffffff;
+        }
+        .history-article h2 { font-size: 2.2rem; margin-bottom: 1.5rem; text-align: center; color: #ffffff; }
+        .history-article p { font-size: 16px; margin-bottom: 1.5rem; text-align: justify; color: #f3f3f3; }
+        .history-article p:first-of-type::first-letter {
+            font-size: 3.5rem; font-weight: bold; float: left; margin-right: 12px; line-height: 1; color: #ffd87a; font-family: 'Trebuchet MS', sans-serif;
+        }
+        .history-article ul { margin-left: 1.5rem; margin-bottom: 1.5rem; color: #f3f3f3; }
+        .history-article li { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 15px; margin-bottom: 10px; text-align: justify; color: #f3f3f3; }
+        .history-article hr { border: 0; height: 1px; background-color: rgba(255,255,255,0.12); margin: 2.5rem 0; }
+
+        /* --- ZOOM IMAGE SETUP --- */
+        .zoomable-image { cursor: zoom-in; transition: transform 0.2s ease; }
+        .zoomable-image:hover { transform: scale(1.03); }
+
+        /* --- MAIN SLIDER SPESIFIKASI --- */
+        .section-title { text-align: center; margin-bottom: 2rem; font-size: 2rem; }
+        .slider-wrapper { position: relative; margin-bottom: 4rem; max-width: 100%; }
+        .slider-container { overflow: hidden; width: 100%; border-radius: 12px; }
+        .slider-track { display: flex; transition: transform 0.4s ease-in-out; width: 100%; }
+        .spec-card { flex: 0 0 100%; background-color: #fdf5d3; border: 1px solid #e0d8c3; padding: 2rem; box-sizing: border-box; }
+        .spec-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e0d8c3; padding-bottom: 1rem; }
+        .spec-header h3 { font-size: 1.3rem; }
+        .spec-table { width: 100%; border-collapse: collapse; }
+        .spec-table td { padding: 10px 0; border-bottom: 1px solid #e0d8c3; font-size: 14px; vertical-align: top;}
+        .spec-table td:first-child { font-weight: bold; width: 30%; }
+
+        /* Tombol Main Slider */
+        .slider-btn { position: absolute; top: 45%; transform: translateY(-50%); background-color: #8da374; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 10; font-size: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); transition: 0.3s; }
+        .slider-btn:hover { background-color: #71835d; }
+        .prev-btn { left: -20px; }
+        .next-btn { right: -20px; }
+        
+        .slider-dots { display: flex; justify-content: center; gap: 8px; margin-top: 1.5rem; }
+        .dot { width: 12px; height: 12px; background-color: #d3ccb8; border-radius: 50%; cursor: pointer; transition: 0.3s; }
+        .dot.active { background-color: #8da374; width: 30px; border-radius: 8px; }
+
+        /* --- VIDEO GRID BAWAH SPESIFIKASI --- */
+        .video-section { margin: 3rem 0; }
+        .video-grid { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; align-items: stretch; }
+        .video-card { display: block; width: 320px; background: #111; color: #fff; text-decoration: none; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 18px rgba(0,0,0,0.15); transition: transform 0.15s ease; }
+        .video-card:hover { transform: translateY(-6px); }
+        .video-card img { display: block; width: 100%; height: 180px; object-fit: cover; }
+        .video-card .video-label { padding: 0.8rem 1rem; font-weight: 700; background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.1)); }
+        @media (max-width: 768px) {
+            .video-card { width: 100%; }
+            .video-card img { height: 200px; }
+        }
+
+        /* --- MINI SLIDER UNTUK GAMBAR --- */
+        .mini-slider {
+            position: relative;
+            width: 400px;
+            height: 240px;
+            overflow: hidden;
+            border-radius: 12px;
+            flex-shrink: 0; 
+            box-shadow: 0 6px 14px rgba(0,0,0,0.14);
+        }
+        .mini-slider-track {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.3s ease-in-out;
+        }
+        .mini-slider-track img {
+            flex: 0 0 100%; 
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background-color: #000;
+        }
+        .mini-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 5;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.2s;
+        }
+        .mini-btn:hover { background: rgba(0,0,0,0.9); }
+        .mini-prev { left: 5px; }
+        .mini-next { right: 5px; }
+
+        .mini-counter {
+            position: absolute;
+            bottom: 5px;
+            right: 8px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-family: sans-serif;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* --- CORE VALUES --- */
+        .values { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; text-align: center; margin-bottom: 4rem; }
+        .value-icon { font-size: 3rem; margin-bottom: 10px; color: #71835d; }
+        .values h4 { margin-bottom: 8px; }
+        .values p { font-size: 12px; color: #666; }
+
+        /* --- STORIES --- */
+        .stories { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 4rem; }
+        .story-item { position: relative; }
+        .story-img-container { position: relative; margin-bottom: 10px; }
+        .story-item img { width: 100%; border-radius: 8px; }
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.8); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #333; pointer-events: none; }
+        .story-item h4 { font-size: 1rem; margin-bottom: 5px; }
+        .story-item p { font-size: 12px; }
+
+        /* --- FOOTER --- */
+        footer { border-top: 1px solid #d3ccb8; padding: 2rem 0; display: flex; justify-content: space-between; align-items: center; font-family: sans-serif; font-size: 14px; }
+        .social-icons { display: flex; gap: 15px; }
+        .social-icons span { background-color: #3b2f2f; color: #fff; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 14px; cursor: pointer; transition: 0.3s;}
+        .social-icons span:hover { background-color: #8da374; }
+
+        /* --- MODAL IMAGE ZOOM CSS --- */
+        .modal { display: none; position: fixed; z-index: 9999; padding-top: 50px; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.85); }
+        .modal-content { margin: auto; display: block; max-width: 90%; max-height: 80vh; transition: transform 0.25s ease; transform-origin: center center; border-radius: 8px; }
+        .close-modal { position: absolute; top: 20px; right: 40px; color: #f1f1f1; font-size: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover, .close-modal:focus { color: #bbb; text-decoration: none; }
+        .zoom-controls { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 10000; }
+        .zoom-controls button { background-color: #8da374; color: white; border: none; padding: 10px 25px; font-size: 24px; font-weight: bold; cursor: pointer; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: background 0.3s; }
+        .zoom-controls button:hover { background-color: #71835d; }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .prev-btn { left: 5px; }
+            .next-btn { right: 5px; }
+            .spec-header { flex-direction: column; text-align: center; }
+            .mini-slider { width: 100%; height: 200px; }
+            .values { grid-template-columns: repeat(2, 1fr); }
+            .stories { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1>  Sejarah Kerjasama Otomotif Indonesia Jepang</h1>
+        <p>Menjelajahi Jejak Legenda: Kijang Sejarah Kita mengisahkan perjalanan tak kenal lelah Toyota Kijang di Indonesia, dari keluaran generasi pertama hingga terbaru yang canggih.</p>
+        <a href="#sejarah-artikel" class="btn-primary">Mulai Perjalanan</a>
+    </section>
+
+    <div class="container">
+        <section id="sejarah-artikel" class="history-article">
+            <h2>Jejak Langkah Sang Legenda Nusantara</h2>
+            <p>Sejarah Toyota Kijang di Indonesia bermula pada 9 Juni 1977. Nama "Kijang" sendiri konon merupakan singkatan dari Kerjasama Indonesia-Jepang, mencerminkan inisiatif pemerintah Indonesia saat itu untuk mengembangkan kendaraan bermotor niaga serbaguna (KBNS) yang terjangkau. Generasi pertama yang populer dengan julukan <strong>Kijang Buaya</strong> (KF10), hadir dengan kap mesin yang dapat dibuka lebar layaknya mulut buaya.</p>
+            <p>Memasuki dekade 1980-an, Kijang bertransformasi pesat. Melalui Kijang Doyok dan Kijang Super di akhir 80-an hingga 90-an, mobil ini tidak lagi sekadar kendaraan niaga. Inovasi teknologi <em>Full Pressed Body</em> diperkenalkan, membuat kabin Kijang jauh lebih nyaman, aman, dan kedap suara. Di sinilah Kijang mengukuhkan statusnya sebagai "Mobil Keluarga Indonesia".</p>
+            <p>Evolusi terus berlanjut ke Kijang Kapsul, Kijang Innova, hingga kini diteruskan oleh Kijang Innova Zenix yang hadir dengan platform TNGA dan opsi mesin Hybrid. Menyatukan teknologi masa depan yang ramah lingkungan dengan warisan kebersamaan yang telah mengakar selama dekade.</p>
+
+            <hr>
+
+            <h2> Lebih Dari Sekadar Mobil</h2>
+            <ul>
+                <li><strong>Simbol Diplomasi Otomotif:</strong> Lahirnya Kijang bukan murni strategi bisnis, melainkan wujud nyata keberhasilan diplomasi ekonomi antara pemerintah Indonesia dan Jepang untuk menghadirkan sarana transportasi penunjang ekonomi rakyat.</li>
+                <li><strong>Cerminan Transformasi Kelas Sosial:</strong> Evolusi bentuk Kijang menjadi indikator kesejahteraan masyarakat. Kijang berevolusi dari mobil pick-up angkut barang (fokus niaga kelas menengah ke bawah) menjadi kendaraan <em>Multi-Purpose Vehicle</em> (MPV) premium yang merepresentasikan naiknya taraf hidup keluarga Indonesia.</li>
+                <li><strong>Katalisator Industri Komponen Lokal:</strong> Kijang merupakan pionir dalam implementasi Tingkat Kandungan Dalam Negeri (TKDN) yang masif. Hal ini secara langsung menghidupkan ekosistem pabrik onderdil lokal, membangun kemandirian industri, dan menyerap puluhan ribu tenaga kerja Indonesia.</li>
+                <li><strong>Ikon Budaya Populer:</strong> Kijang dinilai berhasil melampaui fungsinya sebagai benda mati atau alat transportasi belaka. Ia telah bertransformasi menjadi ikon budaya pop, pengikat memori kolektif, dan simbol kebersamaan keluarga yang diwariskan lintas generasi.</li>
+            </ul>
+        </section>
+
+        <h2 class="section-title">Spesifikasi Semua Generasi</h2>
+        
+        <div class="slider-wrapper">
+            <button class="slider-btn prev-btn" id="prevBtn">&#10094;</button>
+            <button class="slider-btn next-btn" id="nextBtn">&#10095;</button>
+
+            <div class="slider-container">
+                <div class="slider-track" id="sliderTrack">
+                    
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="kijang 1.jpeg" class="zoomable-image" alt="Gen 1">
+                                    <img src="kijang 1 2.jpeg" class="zoomable-image" alt="Gen 1">
+                                    <img src="kijang 1.jpeg" class="zoomable-image" alt="Gen 1">
+                                    <img src="kijang 1 2.jpeg" class="zoomable-image" alt="Gen 1">
+                                </div>
+                            </div>
+                            <h3>Gen 1: Kijang Buaya (1977-1981)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Kode Bodi</td><td>KF10</td></tr>
+                            <tr><td>Tipe Mesin</td><td>3K (1.166 cc) OHV Bensin</td></tr>
+                            <tr><td>Tenaga</td><td>~55 PS</td></tr>
+                            <tr><td>Transmisi</td><td>Manual 4-Percepatan</td></tr>
+                            <tr><td>Fitur Khas</td><td>Pintu tanpa kaca jendela, Kap mesin buka penuh.</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="pikup depan.jpeg" class="zoomable-image" alt="Gen 2 Tampak Depan">
+                                    <img src="pikup belakang.jpeg" class="zoomable-image" alt="Gen 2 Tampak Samping Kanan">
+                                    <img src="pikup kanan.jpeg" class="zoomable-image" alt="Gen 2 Tampak Samping Kiri">
+                                    <img src="pikup kiri.jpeg" class="zoomable-image" alt="Gen 2 Tampak Belakang">
+                                </div>
+                            </div>
+                            <h3>Gen 2: Kijang Doyok (1981-1986)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Kode Bodi</td><td>KF20</td></tr>
+                            <tr><td>Tipe Mesin</td><td>4K (1.290 cc) / 5K (1.486 cc)</td></tr>
+                            <tr><td>Tenaga</td><td>61 PS - 71 PS</td></tr>
+                            <tr><td>Transmisi</td><td>Manual 4-Percepatan</td></tr>
+                            <tr><td>Fitur Khas</td><td>Kaca engkol, Pintu dengan kunci luar, Suspensi nyaman.</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="super depan.jpeg.jpeg" class="zoomable-image" alt="Gen 3">
+                                    <img src="super belakang.jpeg.jpeg" class="zoomable-image" alt="Gen 3">
+                                    <img src="super kanan.jpeg.jpeg" class="zoomable-image" alt="Gen 3">
+                                    <img src="super kiri.jpeg.jpeg" class="zoomable-image" alt="Gen 3">
+                                </div>
+                            </div>
+                            <h3>Gen 3: Kijang Super (1986-1996)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Kode Bodi</td><td>KF40 / KF50</td></tr>
+                            <tr><td>Tipe Mesin</td><td>5K (1.5L) / 7K (1.8L) Bensin</td></tr>
+                            <tr><td>Tenaga</td><td>71 PS - 80 PS</td></tr>
+                            <tr><td>Transmisi</td><td>Manual 5-Percepatan</td></tr>
+                            <tr><td>Fitur Khas</td><td>Teknologi Full Pressed Body, Power Steering.</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="kapsul depan.jpeg" class="zoomable-image" alt="Gen 4">
+                                    <img src="kapsul belakang.jpeg" class="zoomable-image" alt="Gen 4">
+                                    <img src="kapsul kanan.jpeg" class="zoomable-image" alt="Gen 4">
+                                    <img src="kapsul kiri.jpeg" class="zoomable-image" alt="Gen 4">
+                                </div>
+                            </div>
+                            <h3>Gen 4: Kijang Kapsul (1997-2004)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Kode Bodi</td><td>KF70 / KF80</td></tr>
+                            <tr><td>Tipe Mesin</td><td>7K-E (1.8L) / 2L (2.4L Diesel)</td></tr>
+                            <tr><td>Tenaga</td><td>80 PS - 83 PS</td></tr>
+                            <tr><td>Transmisi</td><td>MT 5-Speed / AT 4-Speed</td></tr>
+                            <tr><td>Fitur Khas</td><td>Desain membulat aerodinamis, Injeksi (EFI).</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="inova depan.jpeg" class="zoomable-image" alt="Gen 5">
+                                    <img src="inova belakang.jpeg" class="zoomable-image" alt="Gen 5">
+                                    <img src="inova kanan.jpeg" class="zoomable-image" alt="Gen 5">
+                                    <img src="inova kiri.jpeg" class="zoomable-image" alt="Gen 5">
+                                </div>
+                            </div>
+                            <h3>Gen 5: Kijang Innova (2004-2015)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Platform</td><td>IMV</td></tr>
+                            <tr><td>Tipe Mesin</td><td>1TR-FE (2.0L) / 2KD-FTV (2.5L Diesel)</td></tr>
+                            <tr><td>Tenaga</td><td>136 PS (Bensin) / 102 PS (Diesel)</td></tr>
+                            <tr><td>Transmisi</td><td>MT 5-Speed / AT 4-Speed</td></tr>
+                            <tr><td>Fitur Khas</td><td>Suspensi independen, ABS, Airbag.</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="rebornd depan.jpeg" class="zoomable-image" alt="Gen 6">
+                                    <img src="reborn belakang.jpeg" class="zoomable-image" alt="Gen 6">
+                                    <img src="reborn kanan.jpeg" class="zoomable-image" alt="Gen 6">
+                                    <img src="reborn kiri (2).jpeg" class="zoomable-image" alt="Gen 6">
+                                </div>
+                            </div>
+                            <h3>Gen 6: Innova Reborn (2015-2022)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Sasis</td><td>Ladder Frame (Diperbarui)</td></tr>
+                            <tr><td>Tipe Mesin</td><td>1TR-FE (2.0L) / 2GD-FTV (2.4L Diesel)</td></tr>
+                            <tr><td>Tenaga</td><td>139 PS (Bensin) / 149 PS (Diesel)</td></tr>
+                            <tr><td>Transmisi</td><td>MT 5-Speed / AT 6-Speed</td></tr>
+                            <tr><td>Fitur Khas</td><td>Mode Eco/Power, Ambient Lighting.</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="spec-card">
+                        <div class="spec-header">
+                            <div class="mini-slider">
+                                <button class="mini-btn mini-prev">&#10094;</button>
+                                <button class="mini-btn mini-next">&#10095;</button>
+                                <div class="mini-counter">1/4</div>
+                                <div class="mini-slider-track">
+                                    <img src="ZENIX DEPAN.jpeg" class="zoomable-image" alt="Gen 7">
+                                    <img src="ZENIX BELAKANG.jpeg" class="zoomable-image" alt="Gen 7">
+                                    <img src="ZENIX KANAN.jpeg" class="zoomable-image" alt="Gen 7">
+                                    <img src="ZENIX KIRI.jpeg" class="zoomable-image" alt="Gen 7">
+                                </div>
+                            </div>
+                            <h3>Gen 7: Innova Zenix (2022-Skrg)</h3>
+                        </div>
+                        <table class="spec-table">
+                            <tr><td>Platform</td><td>TNGA-C (Monokok, FWD)</td></tr>
+                            <tr><td>Tipe Mesin</td><td>M20A-FKS (2.0L) / M20A-FXS (Hybrid)</td></tr>
+                            <tr><td>Tenaga</td><td>174 PS (Bensin) / 186 PS (Hybrid)</td></tr>
+                            <tr><td>Transmisi</td><td>CVT / e-CVT</td></tr>
+                            <tr><td>Fitur Khas</td><td>Toyota Safety Sense (TSS), Panoramic Roof.</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slider-dots" id="sliderDots"></div>
+        </div>
+
+        <section class="video-section container">
+            <h2 class="section-title">Video Terkait Mobil Kijang</h2>
+            <div class="video-grid">
+                <a class="video-card" data-video-url="https://youtu.be/9Zl4-QtArM8?si=zvPmjHOh_MekdSOC" href="https://youtu.be/9Zl4-QtArM8?si=zvPmjHOh_MekdSOC" target="_blank" rel="noopener noreferrer">
+                    <img src="https://via.placeholder.com/480x270/000000/ffffff?text=Kijang+Buaya" alt="Kijang Buaya">
+                    <div class="video-label">Kijang Buaya (Gen 1)</div>
+                </a>
+                <a class="video-card" data-video-url="https://youtu.be/3SCiSoCKlDA?si=aF_MN2djaOWBvZSe" href="https://youtu.be/3SCiSoCKlDA?si=aF_MN2djaOWBvZSe" target="_blank" rel="noopener noreferrer">
+                    <img src="https://via.placeholder.com/480x270/222222/ffffff?text=Kijang+Innova" alt="Kijang Innova">
+                    <div class="video-label">Kijang Innova (Gen 5)</div>
+                </a>
+                <a class="video-card" data-video-url="https://youtu.be/L5-zn4oVa5A?si=m6UpKfCe7R8YoC-i" href="https://youtu.be/L5-zn4oVa5A?si=m6UpKfCe7R8YoC-i" target="_blank" rel="noopener noreferrer">
+                    <img src="https://via.placeholder.com/480x270/333333/ffffff?text=Innova+Zenix" alt="Innova Zenix">
+                    <div class="video-label">Innova Zenix (Gen 7)</div>
+                </a>
+            </div>
+        </section>
+
+
+        <footer>
+            <div class="social-icons"><span>f</span><span>IG</span><span>▶</span></div>
+            <div>Shofi Ahmad Nizam | 23040330077</div>
+        </footer>
+    </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div class="zoom-controls">
+            <button id="btnZoomOut">-</button>
+            <button id="btnZoomIn">+</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. LOGIKA UNTUK SLIDER UTAMA (GANTI GENERASI) ---
+            const mainTrack = document.getElementById('sliderTrack');
+            const mainSlides = Array.from(mainTrack.children);
+            const mainNextBtn = document.getElementById('nextBtn');
+            const mainPrevBtn = document.getElementById('prevBtn');
+            const dotsNav = document.getElementById('sliderDots');
+            
+            let mainIndex = 0;
+
+            mainSlides.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active'); 
+                dot.addEventListener('click', () => moveToMainSlide(index));
+                dotsNav.appendChild(dot);
+            });
+
+            const dots = Array.from(dotsNav.children);
+
+            function updateDots(index) {
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[index].classList.add('active');
+            }
+
+            function moveToMainSlide(index) {
+                if (index < 0) index = mainSlides.length - 1;
+                if (index >= mainSlides.length) index = 0;
+                
+                mainIndex = index;
+                mainTrack.style.transform = `translateX(-${index * 100}%)`;
+                updateDots(index);
+            }
+
+            mainNextBtn.addEventListener('click', () => moveToMainSlide(mainIndex + 1));
+            mainPrevBtn.addEventListener('click', () => moveToMainSlide(mainIndex - 1));
+
+
+            // --- 2. LOGIKA UNTUK MINI SLIDER (4 FOTO DI TIAP KARTU) ---
+            const miniSliders = document.querySelectorAll('.mini-slider');
+            
+            miniSliders.forEach(slider => {
+                const track = slider.querySelector('.mini-slider-track');
+                const images = track.querySelectorAll('img');
+                const prevBtn = slider.querySelector('.mini-prev');
+                const nextBtn = slider.querySelector('.mini-next');
+                const counter = slider.querySelector('.mini-counter');
+                let imgIndex = 0;
+
+                function updateMiniSlider() {
+                    track.style.transform = `translateX(-${imgIndex * 100}%)`;
+                    counter.innerText = `${imgIndex + 1}/${images.length}`;
+                }
+
+                nextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    imgIndex++;
+                    if(imgIndex >= images.length) imgIndex = 0;
+                    updateMiniSlider();
+                });
+
+                prevBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    imgIndex--;
+                    if(imgIndex < 0) imgIndex = images.length - 1;
+                    updateMiniSlider();
+                });
+            });
+
+            // --- Auto-load YouTube thumbnails for the video cards ---
+            (function() {
+                function extractYouTubeID(url) {
+                    if (!url) return null;
+                    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                    return m ? m[1] : null;
+                }
+
+                document.querySelectorAll('.video-card').forEach(card => {
+                    const url = card.dataset.videoUrl || card.getAttribute('href');
+                    const id = extractYouTubeID(url);
+                    if (!id) return;
+
+                    const img = card.querySelector('img');
+                    if (img) img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+                    if (card.tagName.toLowerCase() === 'a') {
+                        card.href = `https://www.youtube.com/watch?v=${id}`;
+                        card.target = '_blank';
+                        card.rel = 'noopener noreferrer';
+                    } else {
+                        card.addEventListener('click', () => window.open(`https://www.youtube.com/watch?v=${id}`, '_blank', 'noopener'));
+                    }
+                });
+            })();
+
+            // --- 3. LOGIKA UNTUK ZOOM GAMBAR MODAL ---
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            const closeModal = document.querySelector(".close-modal");
+            const btnZoomIn = document.getElementById("btnZoomIn");
+            const btnZoomOut = document.getElementById("btnZoomOut");
+            
+            let currentScale = 1;
+            const allZoomableImages = document.querySelectorAll('.zoomable-image');
+
+            allZoomableImages.forEach(img => {
+                img.title = 'Klik untuk memperbesar / zoom';
+                img.addEventListener('click', function() {
+                    modal.style.display = "block";
+                    modalImg.src = this.src;
+                    currentScale = 1;
+                    modalImg.style.transform = `scale(${currentScale})`;
+                });
+            });
+
+            closeModal.addEventListener('click', function() { modal.style.display = "none"; });
+
+            btnZoomIn.addEventListener('click', function() {
+                if (currentScale < 3) {
+                    currentScale += 0.2;
+                    modalImg.style.transform = `scale(${currentScale})`;
+                }
+            });
+
+            btnZoomOut.addEventListener('click', function() {
+                if (currentScale > 0.5) {
+                    currentScale -= 0.2;
+                    modalImg.style.transform = `scale(${currentScale})`;
+                }
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) modal.style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>
